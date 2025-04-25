@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glass-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.input-field {
+  @apply w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A];
+}
+
+.btn-primary {
+  @apply w-full py-2 px-4 rounded-xl text-white font-semibold bg-[#0B1926] hover:bg-[#1a2b36] transition;
+}
+
+.btn-secondary {
+  @apply w-full py-2 px-4 rounded-xl text-black font-semibold bg-[#A6B91A] hover:bg-[#95a813] transition;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 8px;
+}

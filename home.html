@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentinela Cidadã - Denúncias</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-[#0B1926] to-[#1d2a34] min-h-screen flex items-center justify-center px-4 py-8">
+
+  <div class="w-full max-w-2xl p-8 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl transition-all duration-500 ease-in-out">
+    <h2 class="text-3xl font-bold text-white mb-6 text-center">
+      Sentinela <span class="text-[#A6B91A]">Cidadã</span> - Denúncias
+    </h2>
+
+    <!-- Formulário de Denúncia -->
+    <form id="denunciaForm" class="space-y-4">
+      <input type="text" placeholder="Título da Denúncia" required
+        class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]" />
+      
+      <textarea placeholder="Descreva sua denúncia aqui..." rows="4" required
+        class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]"></textarea>
+
+      <div class="grid grid-cols-2 gap-4">
+        <input type="number" placeholder="Urgência (1-5)" min="1" max="5" required
+          class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]" />
+        
+        <select id="orgaoSelect" required
+          class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]">
+          <option value="" disabled selected>Selecione o Órgão Competente</option>
+          <!-- A lista de órgãos será carregada dinamicamente -->
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <select id="tipoProblemaSelect" required
+          class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]">
+          <option value="" disabled selected>Selecione o Tipo de Problema</option>
+          <!-- A lista de tipos de problemas será carregada dinamicamente -->
+        </select>
+
+        <input type="file" id="imagemDenuncia" accept="image/*"
+          class="w-full px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#A6B91A]" />
+      </div>
+
+      <button type="submit"
+        class="w-full py-2 px-4 rounded-xl text-white font-semibold bg-[#0B1926] hover:bg-[#1a2b36] transition">
+        Enviar Denúncia
+      </button>
+    </form>
+
+    <!-- Visualizar Denúncias -->
+    <div id="visualizarDenuncias" class="mt-8 space-y-4">
+      <h3 class="text-xl font-semibold text-white mb-4">Minhas Denúncias</h3>
+      <div id="denunciasList" class="space-y-4">
+        <!-- Exemplo de Denúncia Enviada -->
+        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+          <p class="text-white">Título: Abuso animal observado nas ruas centrais...</p>
+          <p class="text-white">Descrição: Animais abandonados na praça central...</p>
+          <p class="text-white">Urgência: 5</p>
+          <p class="text-white">Órgão: Prefeitura Municipal</p>
+          <p class="text-white">Tipo de Problema: Abandono de animais</p>
+          <p class="text-[#A6B91A]">Status: Em análise</p>
+          <img src="exemplo-imagem.jpg" alt="Imagem da denúncia" class="w-full mt-4 rounded-xl" />
+        </div>
+        <!-- Fim de exemplo -->
+      </div>
+    </div>
+
+    <p class="mt-6 text-sm text-white text-center">
+      Precisa de ajuda?
+      <button id="contatoSuporte" class="text-[#F2C94C] hover:underline focus:outline-none transition">
+        Contate o Suporte
+      </button>
+    </p>
+  </div>
+
+  <script>
+    const denunciaForm = document.getElementById("denunciaForm");
+    const denunciasList = document.getElementById("denunciasList");
+    const orgaoSelect = document.getElementById("orgaoSelect");
+    const tipoProblemaSelect = document.getElementById("tipoProblemaSelect");
+
+    // Vetores simulando dados de um endpoint
+    const orgaos = ["Prefeitura Municipal", "Vigilância Sanitária", "Polícia Militar"];
+    const tiposProblema = ["Abuso Animal", "Buraco na Rua", "Corte de Árvores", "Problemas no Trânsito"];
+
+    // Função para carregar órgãos competentes e tipos de problemas (simulação de dados)
+    function carregarDados() {
+      // Simulação de endpoint para órgãos e tipos de problema
+      // No código real, seria algo como:
+      // fetch('api/orgao-competente').then(res => res.json()).then(data => { /* lógica para popular select */ });
+      orgaoSelect.innerHTML = orgaos.map(orgao => `<option value="${orgao}" class="bg-[#0B1926] text-white">${orgao}</option>`).join("");
+      tipoProblemaSelect.innerHTML = tiposProblema.map(tipo => `<option value="${tipo}" class="bg-[#0B1926] text-white">${tipo}</option>`).join("");
+    }
+
+    carregarDados();
+
+    denunciaForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      const titulo = e.target.querySelector("input[placeholder='Título da Denúncia']").value;
+      const descricao = e.target.querySelector("textarea").value;
+      const urgencia = e.target.querySelector("input[placeholder='Urgência (1-5)']").value;
+      const orgao = orgaoSelect.value;
+      const tipoProblema = tipoProblemaSelect.value;
+      const imagem = e.target.querySelector("#imagemDenuncia").files[0];
+
+      // Criar item de denúncia com imagem (se houver)
+      const denunciaItem = document.createElement("div");
+      denunciaItem.classList.add("bg-white/10", "p-4", "rounded-xl", "border", "border-white/20");
+      denunciaItem.innerHTML = `
+        <p class="text-white">Título: ${titulo}</p>
+        <p class="text-white">Descrição: ${descricao}</p>
+        <p class="text-white">Urgência: ${urgencia}</p>
+        <p class="text-white">Órgão: ${orgao}</p>
+        <p class="text-white">Tipo de Problema: ${tipoProblema}</p>
+        <p class="text-[#A6B91A]">Status: Em análise</p>
+      `;
+      
+      if (imagem) {
+        const imagemElement = document.createElement("img");
+        imagemElement.src = URL.createObjectURL(imagem);
+        imagemElement.alt = "Imagem da denúncia";
+        imagemElement.classList.add("w-full", "mt-4", "rounded-xl");
+        denunciaItem.appendChild(imagemElement);
+      }
+
+      // Adicionar à lista de denúncias
+      denunciasList.appendChild(denunciaItem);
+
+      // Limpar o formulário
+      denunciaForm.reset();
+    });
+  </script>
+</body>
+</html>
